@@ -4,6 +4,8 @@
 # @Email   : yongcao@fuzhi.ai
 import argparse
 from moviepy.video.io.VideoFileClip import VideoFileClip
+import cv2
+import datetime
 
 
 class VideoCutter:
@@ -21,6 +23,11 @@ class VideoCutter:
         start_time = self.start_time  # 获取开始剪切时间
         stop_time = self.stop_time  # 获取剪切的结束时间
         video = VideoFileClip(source)  # 视频文件加载
+        cap = cv2.VideoCapture(source)
+        print("原视频帧率： ", int(cap.get(5)))
+        print("总帧数： ", int(cap.get(7)))
+        print("视频时长：", str(datetime.timedelta(seconds=int(cap.get(7) / cap.get(5)))))
+        print("视频宽度：{}， 高度： {}".format(int(cap.get(3)), int(cap.get(4))))
         video = video.subclip(int(start_time), int(stop_time))  # 执行剪切操作
         video.to_videofile(target, fps=20, remove_temp=True)  # 输出文件
 
